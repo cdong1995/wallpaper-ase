@@ -1,9 +1,9 @@
 'use strict';
 const electron = require('electron')
 const {app, BrowserWindow, Menu, ipcMain, dialog} = electron
-const Wallpaper = require('./models/wallpaper')
+const Database = require('./models/wallpaper')
 const mongoose = require('mongoose')
-const upload = require('./upload')
+const operations = require('./upload')
 require('electron-reload')(__dirname);
 
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase')
@@ -61,12 +61,14 @@ const mainMenuTemplate =  [
             }]
           }, function (fileNames) { 
             // fileNames is an array that contains all the selected 
-            if(fileNames === undefined) { 
-               console.log("No file selected"); 
-            
-            } else { 
+            if(operations.GlobalUser == "Admin") { 
+              console.log("Please login first")
+            } else if(fileNames === undefined){
+              console.log("No file selected");
+            }
+            else{ 
                let  path = fileNames[0];
-               upload(path)
+               operations.upload(path)
             } 
           })
         }

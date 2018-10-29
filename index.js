@@ -1,30 +1,44 @@
 const {ipcRenderer} = require('electron')
-const Wallpaper = require('./models/wallpaper')
 const mongoose = require('mongoose')
+var operations = require('./upload.js')
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase')
 
 const keyword = document.getElementById('keyword')
 const search =  document.getElementById('search')
-function showImage(src) {
-  var img = document.createElement("img");
-  img.src = src;
-  img.width = 200;
-  img.height = 200;
-  document.getElementById('showImg').appendChild(img)
-}
+const addUser = document.getElementById('add')
+const user = document.getElementById('user')
+const switchUser = document.getElementById('switch')
+const homeBtn = document.getElementById('home')
+const likesBtn = document.getElementById('likes')
+const logout = document.getElementById('logout')
 
-// showWallpaper()
-Wallpaper.find({}, function(err, allWallpapers) {
-  if(err) console.log(err)
-  else {
-      allWallpapers.forEach(wallpaper => {
-      showImage(wallpaper.url)
-    });      
-  }
-})
 
-// search
+operations.showAll();
+
 search.addEventListener("click",function(){
   let searchUrl = "https://source.unsplash.com/random?" + keyword.value
-  showImage(searchUrl)
+  operations.showSearchedImage(searchUrl)
 })
+
+addUser.addEventListener("click", function(){
+  operations.addUser(user.value)
+})
+
+switchUser.addEventListener("click", function(){
+  operations.switchUser(user.value)
+})
+
+homeBtn.addEventListener("click", function(){
+  operations.showAll();
+})
+
+likesBtn.addEventListener("click", function(){
+  operations.showLikes();
+})
+
+logout.addEventListener("click", function(){
+  operations.logOut();
+})
+
+
+
