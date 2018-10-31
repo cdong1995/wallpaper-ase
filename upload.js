@@ -6,7 +6,7 @@ cloudinary.config({
     cloud_name: 'candong', 
     api_key: 823243289597989, 
     api_secret: '0F1l-otQXSMbnZrj8OQQRZiEEI0'
-});
+})
 
 
 

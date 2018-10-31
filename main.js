@@ -70,7 +70,7 @@ const mainMenuTemplate =  [
               let  path = fileNames[0];
               operations.upload(path, (callback_wallpaper) =>{
                 console.log(callback_wallpaper)
-              })
+              }) 
               
             // } 
           })
