@@ -46,7 +46,7 @@ jobs:
     #       path: /test
     #   - store_artifacts:
     #       path: reports/junit
-      run tests!
+    #   run tests!
       - run: npm install
       - run: npm test
       - run: npm eslint
