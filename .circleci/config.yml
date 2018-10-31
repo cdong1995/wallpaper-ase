@@ -49,6 +49,6 @@ jobs:
     #   run tests!
       - run: npm install
       - run: npm test
-      - run: npm eslint
+      - run: npm run eslint
 
 
