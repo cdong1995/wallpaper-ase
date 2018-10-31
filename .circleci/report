@@ -1,4 +1,4 @@
-test
+#test
 
 #!/bin/bash -eo pipefail
 npm test
@@ -20,7 +20,7 @@ Ran all test suites.
     
     
     
-bug finder
+#bug finder
 #!/bin/bash -eo pipefail
 npm run eslint
 
