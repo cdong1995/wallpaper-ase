@@ -1,0 +1,29 @@
+test
+
+#!/bin/bash -eo pipefail
+npm test
+
+> electron-quick-start@1.0.0 test /home/circleci/repo
+> jest --detectOpenHandles
+
+ PASS  test/upload.test.js
+  Upload
+    ✓ upload the example image (71ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.7s
+Ran all test suites.
+  console.log upload.js:24
+    { url: undefined }
+    
+    
+    
+bug finder
+#!/bin/bash -eo pipefail
+npm run eslint
+
+> electron-quick-start@1.0.0 eslint /home/circleci/repo
+> eslint *js 
+
