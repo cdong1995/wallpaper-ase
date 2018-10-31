@@ -21,7 +21,7 @@ search.addEventListener("click",function(){
 })
 
 addUser.addEventListener("click", function(){
-  operations.addUser(user.value)
+  operations.addUser(user.value) 
 })
 
 switchUser.addEventListener("click", function(){
