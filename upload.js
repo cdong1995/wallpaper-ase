@@ -15,17 +15,25 @@ class Operations{
         this.GlobalUser = "Admin";
     }
 
-    upload(filePath) {
+    upload(filePath, callback) {
+        // var uploadRes = 'try'
+        
         cloudinary.uploader.upload(filePath, (result) => {
             url = result.secure_url
             let newWallpaper = {url : url}
             console.log(newWallpaper)
             Database.wallpaper.create(newWallpaper, function(err, wallpaper){
             if(err) console.log(err)
-            else console.log(wallpaper)
+            else {
+                // uploadRes = wallpaper
+                callback(wallpaper)
+                // console.log(uploadRes)
+            }
+            
             })
         })
-
+        // console.log(uploadRes)
+        // return uploadRes
     }
     
     //Simulate user register function

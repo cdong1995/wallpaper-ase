@@ -61,15 +61,18 @@ const mainMenuTemplate =  [
             }]
           }, function (fileNames) { 
             // fileNames is an array that contains all the selected 
-            if(operations.GlobalUser == "Admin") { 
-              console.log("Please login first")
-            } else if(fileNames === undefined){
-              console.log("No file selected");
-            }
-            else{ 
-               let  path = fileNames[0];
-               operations.upload(path)
-            } 
+            // if(operations.GlobalUser == "Admin") { 
+            //   console.log("Please login first")
+            // } else if(fileNames === undefined){
+            //   console.log("No file selected");
+            // }
+            // else{ 
+              let  path = fileNames[0];
+              operations.upload(path, (callback_wallpaper) =>{
+                console.log(callback_wallpaper)
+              })
+              
+            // } 
           })
         }
       },
