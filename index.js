@@ -10,7 +10,7 @@ const user = document.getElementById('user')
 const switchUser = document.getElementById('switch')
 const homeBtn = document.getElementById('home')
 const likesBtn = document.getElementById('likes')
-const logout = document.getElementById('logout')
+const logout = document.getElementById('logout') 
 
 
 operations.showAll() 
