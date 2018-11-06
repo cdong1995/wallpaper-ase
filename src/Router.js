@@ -1,16 +1,13 @@
 import React from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
-import App from "./App";
 import { SiderDemo } from "./page";
-import Image from "./Image";
-import Settings from "./Settings";
 
 const Router = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={SiderDemo} />
-      <Route exact path="/image" component={Image} />
-      <Route exact path="/settings" component={Settings} />
+      {/* <Route exact path="/image" component={Image} />
+      <Route exact path="/settings" component={Settings} /> */}
     </Switch>
   </BrowserRouter>
 );

@@ -5,6 +5,9 @@ const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 
 const path = require('path');
+const fs = require('fs');
+const request = require("request");
+const wallpaper = require('wallpaper');
 const url = require('url');
 const isDev = require('electron-is-dev');
 
@@ -146,6 +149,44 @@ ipcMain.on('show-image', (event, filePath) => {
       else console.log(wallpaper)
     })
   })
+})
+
+ipcMain.on('download-image', (event, filePath) => {
+
+  return new Promise((resolve, reject) => {
+    const tempDir = path.join(__dirname, "..");
+    const tempFileName = `temp${Date.now()}.jpg`;
+    const tempFilePath = path.join(tempDir, tempFileName);
+    const writeFileTo = fs.createWriteStream(path.join(tempDir, tempFileName));
+    const getImageFile = request.get(filePath);
+
+    getImageFile.pipe(writeFileTo);
+    getImageFile.on("error", reject);
+    getImageFile.on("complete", () => {
+      // Image has been saved to tempFilePath
+      // Change desktop background using applescript
+      const script = spawn("osascript", [
+        "-e",
+        `tell application "Finder" to set desktop picture to POSIX file "${tempFilePath}"`
+      ]);
+      script.on("close", resolve);
+    });
+  })
+  // const tempDir = path.join(__dirname, "..");
+  // const tempFileName = `temp${Date.now()}.jpg`;
+  // const tempFilePath = path.join(tempDir, tempFileName);
+  // const writeFileTo = fs.createWriteStream(tempFilePath);
+  // const getImageFile = request.get(filePath);
+
+  // getImageFile.pipe(writeFileTo);
+  // console.log(tempFilePath);
+  // wallpaper.set(tempFilePath, () => );
+  // (async () => {
+  //   await wallpaper.set(tempFilePath);
+  
+  //   await wallpaper.get();
+  //   //=> '/Users/sindresorhus/unicorn.jpg'
+  // })();
 })
 
 
