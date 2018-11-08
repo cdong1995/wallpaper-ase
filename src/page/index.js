@@ -69,7 +69,7 @@ export class SiderDemo extends React.Component {
                             <span className="nav-text">Upload</span>
                             <NavLink to="/upload"></NavLink>
                         </Menu.Item>
-                        <Menu.Item key="3">
+                        {/* <Menu.Item key="3">
                             <Icon type="heart" theme="outlined"/>
                             <span className="nav-text">Likes</span>
                             <NavLink to="/likes"></NavLink>
@@ -81,23 +81,23 @@ export class SiderDemo extends React.Component {
                         <Menu.Item key="5">
                             <Icon type="setting" theme="outlined" />
                             <span className="nav-text">Setting</span>
-                        </Menu.Item>
+                        </Menu.Item> */}
                     </Menu>
                 </Sider>
                 <Layout style={{ marginLeft: 200 }}>
                     <Header style={{ background: '#fff', padding: 0}}>
                     <div style={{ textAlign: 'center' }}>
-                        <Search style={{ marginLeft: 10}} placeholder="input search text" onSearch={keyword => this.onSearch(keyword)} enterButton/>
+                        <Search style={{ marginLeft: 10}} placeholder="want to find more?" onSearch={keyword => this.onSearch(keyword)} enterButton/>
                     </div>
                     </Header>
                     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-                            <div style={{ padding: 24, background: '#fff', textAlign: 'center',minHeight: 660 }}>
-                                <Switch>
+                        <div style={{ padding: 24, background: '#fff', textAlign: 'center',minHeight: 660 }}>
+                            <Switch>
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/upload" component={Uploads}/>
                                 <Route path="/likes" component={Likes}/>
-                                </Switch>
-                            </div>
+                            </Switch>
+                        </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
                         Wallpaper Workshop ©2018 Created by KetchUp
