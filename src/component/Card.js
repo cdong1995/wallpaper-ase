@@ -43,22 +43,28 @@ export default class ShowCard extends React.Component{
     //     const getImageFile = request.get(url);
     
     //     getImageFile.pipe(writeFileTo);
+
+    //theme="twoTone" twoToneColor={this.state.color} onClick={()=>{this.onChangeColor(this.state.color)}}
         
     // }
     render(){
         const { item } = this.props;
-        //console.log(item)
-        //console.log(item._doc.url)
+        var picUrl;
+        if (item.hasOwnProperty("_doc")){
+            picUrl = item._doc.url;
+        } else if (item.hasOwnProperty("urls")){
+            picUrl = item.urls.full;
+        }
         
         return (
             <div>
             <Card
                 style={{ width: 300 }}
-                cover={<img alt="example" src={item._doc.url} />}
+                cover={<img alt="example" src={picUrl} />}
                 actions={
-                [<Icon type="heart" theme="twoTone" twoToneColor={this.state.color} onClick={()=>{this.onChangeColor(this.state.color)}}/>, 
-                <Icon type="folder-add" />, 
-                <Icon type="download" onClick={() => {ipcRenderer.send("download-image", item._doc.url)}}/>]
+                [<Icon type="heart" />, 
+                <Icon type="folder-add"/>, 
+                <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", item._doc.url)}}/>]
             }
             >
             </Card>

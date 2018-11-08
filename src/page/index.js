@@ -6,6 +6,9 @@ import Uploads from "./upload";
 import Likes from "./likes";
 import Home from "./home";
 
+import unsplash from '../services/unsplash';
+import {toJson} from 'unsplash-js';
+
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 
@@ -22,6 +25,32 @@ export class SiderDemo extends React.Component {
         console.log(collapsed);
         this.setState({ collapsed });
     }
+
+    onSearch = (keyword) => {
+        // console.log(keyword);
+        // ipcRenderer.send('search-image', keyword);
+
+        // const authenticationUrl = unsplash.auth.getAuthenticationUrl([
+        //     'public',
+        //     'read_photos'
+        // ]);
+        //
+        // window.location.assign(authenticationUrl);
+
+        // console.log(unsplash);
+
+        unsplash.search.photos(keyword, 1, 20)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(toJson)
+            .then(json => {
+                console.log(json);
+                ipcRenderer.send('search-image-result', json);
+            });
+
+
+    };
 
     render() {
         return (
@@ -58,7 +87,7 @@ export class SiderDemo extends React.Component {
                 <Layout style={{ marginLeft: 200 }}>
                     <Header style={{ background: '#fff', padding: 0}}>
                     <div style={{ textAlign: 'center' }}>
-                        <Search style={{ marginLeft: 10}} placeholder="input search text" onSearch={value => console.log(value)} enterButton/>
+                        <Search style={{ marginLeft: 10}} placeholder="input search text" onSearch={keyword => this.onSearch(keyword)} enterButton/>
                     </div>
                     </Header>
                     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>

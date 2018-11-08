@@ -1,13 +1,10 @@
 import React from "react";
-import { Upload, message, Button, Icon } from 'antd';
 import CardList from '../component/CardList'
-import axios from 'axios';
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
-//const ipcMain = electron.ipcMain;
 
-class Uploads extends React.Component {
+class Home extends React.Component {
     constructor(){
         super()
         this.state={
@@ -38,6 +35,14 @@ class Uploads extends React.Component {
             });
         console.log(this.state.posts);
         */
+
+       ipcRenderer.on('show-search-result',(event, arg) => {
+        this.setState({
+            posts: arg
+        });
+        console.log(this.state.posts)
+        
+    });
     }
     render(){       
         return (
@@ -48,4 +53,4 @@ class Uploads extends React.Component {
     }
 
 }
-export default Uploads;
+export default Home;

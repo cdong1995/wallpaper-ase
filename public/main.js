@@ -3,6 +3,7 @@ const ipcMain = electron.ipcMain;
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
+const { spawn } = require("child_process");
 
 const path = require('path');
 const fs = require('fs');
@@ -13,6 +14,7 @@ const isDev = require('electron-is-dev');
 
 const cloudinary = require('cloudinary');
 const Wallpaper = require('../models/wallpaper');
+
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase');
@@ -189,4 +191,7 @@ ipcMain.on('download-image', (event, filePath) => {
   // })();
 })
 
-
+ipcMain.on('search-image-result', (event, rawJsonResult) => {
+  console.log(rawJsonResult.results);
+  mainWindow.webContents.send('show-search-result', rawJsonResult.results)
+});
