@@ -8,13 +8,13 @@ const { spawn } = require("child_process");
 const path = require('path');
 const fs = require('fs');
 const request = require("request");
-const wallpaper = require('wallpaper');
+// const wallpaper = require('wallpaper');
 const url = require('url');
 const isDev = require('electron-is-dev');
 
 const cloudinary = require('cloudinary');
 const Wallpaper = require('../models/wallpaper');
-
+const upload = require('./lib/upload');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase');
@@ -107,22 +107,7 @@ ipcMain.on('show-image', () => {
 })
 
 ipcMain.on('upload-image', (event, image) => {
-  var url
-  // cloudinary config
-  cloudinary.config({ 
-      cloud_name: 'candong', 
-      api_key: 823243289597989, 
-      api_secret: '0F1l-otQXSMbnZrj8OQQRZiEEI0'
-  });
-  cloudinary.uploader.upload(image, (result) => {
-    url = result.secure_url
-    let newWallpaper = {url : url}
-    console.log(newWallpaper)
-    Wallpaper.create(newWallpaper, function(err, wallpaper){
-    if(err) console.log(err)
-      else console.log(wallpaper)
-    })
-  })
+  upload(image);
 })
 
 ipcMain.on('request-image', (event, type) => {

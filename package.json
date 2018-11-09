@@ -9,8 +9,10 @@
     "concurrently": "^3.6.1",
     "electron-builder": "^20.27.1",
     "electron-is-dev": "^0.3.0",
+    "eslint": "^5.8.0",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
+    "jest": "^23.6.0",
     "mongoose": "^5.3.8",
     "path": "^0.12.7",
     "react": "^16.4.2",
@@ -18,14 +20,14 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "request": "^2.88.0",
-    "wait-on": "^2.1.0",
-    "wallpaper": "^4.1.0",
-    "unsplash-js": "^4.8.0"
+    "unsplash-js": "^4.8.0",
+    "wait-on": "^2.1.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "test": "jest",
+    "eslint": "eslint *js ",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\""
   },
