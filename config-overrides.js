@@ -5,5 +5,5 @@ module.exports = function override(config, env) {
         ['import', { libraryName: 'antd', libraryDirectory: 'es', style: 'css' }],
         config
     );
-    return config;
+    return config; 
 };
