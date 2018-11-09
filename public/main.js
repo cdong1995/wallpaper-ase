@@ -175,7 +175,7 @@ ipcMain.on('download-image', (event, filePath) => {
   //   //=> '/Users/sindresorhus/unicorn.jpg'
   // })();
 })
-
+ 
 ipcMain.on('search-image-result', (event, rawJsonResult) => {
   console.log(rawJsonResult.results);
   mainWindow.webContents.send('show-search-result', rawJsonResult.results)
