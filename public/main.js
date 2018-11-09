@@ -179,4 +179,4 @@ ipcMain.on('download-image', (event, filePath) => {
 ipcMain.on('search-image-result', (event, rawJsonResult) => {
   console.log(rawJsonResult.results);
   mainWindow.webContents.send('show-search-result', rawJsonResult.results)
-});
+});  
