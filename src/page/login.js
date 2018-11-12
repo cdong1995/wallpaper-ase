@@ -19,7 +19,7 @@ class NormalLoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form"  style={{ width: '60%', marginLeft: '20%' }}>
+      <Form onSubmit={this.handleSubmit} className="login-form"  style={{ width: '60%', marginLeft: '20%', marginTop: '20%', marginBottom: '20%'}}>
         <FormItem>
           {getFieldDecorator('userName', {
             rules: [{ required: true, message: 'Please input your username!' }],
@@ -49,7 +49,7 @@ class NormalLoginForm extends React.Component {
             </Button>          
           </div>
           Or 
-          <NavLink to="/register">register now!</NavLink>
+          <NavLink to="/register"> register now!</NavLink>
 
         </FormItem>
       </Form>

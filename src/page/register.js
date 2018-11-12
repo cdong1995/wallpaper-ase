@@ -97,7 +97,7 @@ class RegistrationForm extends React.Component {
     };
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} style={{ width: '60%', marginLeft: '18%', marginTop: '20%', marginBottom: '20%'}}>
         <FormItem
           {...formItemLayout}
           label="E-mail"
