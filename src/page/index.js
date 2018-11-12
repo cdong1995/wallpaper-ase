@@ -6,6 +6,7 @@ import Uploads from "./upload";
 import Likes from "./likes";
 import Home from "./home";
 import Login from "./login";
+import Register from "./register";
 
 import unsplash from '../services/unsplash';
 import {toJson} from 'unsplash-js';
@@ -78,11 +79,12 @@ export class SiderDemo extends React.Component {
                         <Menu.Item key="4">
                             <Icon type="folder" theme="outlined" />
                             <span className="nav-text">Collection</span>
+                            <NavLink to="/collection"></NavLink>
                         </Menu.Item>
                         <Menu.Item key="5">
                             <Icon type="setting" theme="outlined" />
                             <span className="nav-text">Setting</span>
-                            <NavLink to="/login"></NavLink>
+                            <NavLink to="/setting"></NavLink>
                         </Menu.Item> 
                     </Menu>
                 </Sider>
@@ -98,7 +100,8 @@ export class SiderDemo extends React.Component {
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/upload" component={Uploads}/>
                                 <Route path="/likes" component={Likes}/>
-                                <Route path="/login" component={Login}/>
+                                <Route path="/collection" component={Register}/>
+                                <Route path="/setting" component={Login}/>
                             </Switch>
                         </div>
                     </Content>
