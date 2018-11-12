@@ -60,7 +60,7 @@ export default class ShowCard extends React.Component{
             <div>
             <Card
                 style={{ width: 300 }}
-                cover={<img alt="example" src={picUrl} />}
+                cover={<img alt="example" src={picUrl} widht="300" height="180" />}
                 actions={
                 [<Icon type="heart" />, 
                 <Icon type="folder-add"/>, 
