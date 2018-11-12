@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { NavLink } from "react-router-dom";
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -43,12 +44,13 @@ class NormalLoginForm extends React.Component {
      
             <a className="login-form-forgot" href="" style={{float:'right'}}>Forgot password?</a>
           <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}}>
+            <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}} href="/">
                 Log in
             </Button>          
           </div>
-          Or <a href="">register now!</a>
-          
+          Or 
+          <NavLink to="/register">register now!</NavLink>
+
         </FormItem>
       </Form>
     );

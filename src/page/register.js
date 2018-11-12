@@ -169,7 +169,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">Register</Button>
+          <Button type="primary" htmlType="submit" href="/login">Register</Button>
         </FormItem>
       </Form>
     );

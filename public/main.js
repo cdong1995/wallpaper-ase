@@ -29,7 +29,7 @@ function createWindow() {
   imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
   settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+  mainWindow.loadURL(isDev ? 'http://localhost:3000/login' : `file://${path.join(__dirname, '../build/index.html')}`);
   imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
   settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
 

@@ -1,15 +1,19 @@
-import React from "react"
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import { SiderDemo } from "./page";
+import Login from "./page/login";
+import Register from "./page/register";
 
-const Router = () => (
-  <BrowserRouter>
-    <Switch>
-      <Route exact path="/" component={SiderDemo} />
-      {/* <Route exact path="/image" component={Image} />
-      <Route exact path="/settings" component={Settings} /> */}
-    </Switch>
-  </BrowserRouter>
-);
+const Router = () => {
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/" component={SiderDemo} />
+            </Switch>
+        </BrowserRouter>
+    );
+};
 
 export default Router;
