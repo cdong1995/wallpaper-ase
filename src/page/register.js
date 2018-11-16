@@ -1,45 +1,52 @@
 import React from "react";
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
-
+const electron = window.require('electron');
+const ipcRenderer = electron.ipcRenderer;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
-
-const residences = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  children: [{
-    value: 'hangzhou',
-    label: 'Hangzhou',
-    children: [{
-      value: 'xihu',
-      label: 'West Lake',
-    }],
-  }],
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  children: [{
-    value: 'nanjing',
-    label: 'Nanjing',
-    children: [{
-      value: 'zhonghuamen',
-      label: 'Zhong Hua Men',
-    }],
-  }],
-}];
 
 class RegistrationForm extends React.Component {
   state = {
     confirmDirty: false,
     autoCompleteResult: [],
+    Email : "",
+    Password : "",
+    confirmPassword : "",
   };
 
-  handleSubmit = (e) => {
+  componentDidMount(){
+    ipcRenderer.on('transitionToLogin', () => {
+      this.props.history.push('/login');
+    });
+  }
+  handleGetEmail = (event) => {
+    this.setState({
+      Email : event.target.value,
+    })
+  };
+
+  handleGetPassword = (event) => {
+    this.setState({
+      Password : event.target.value,
+    })
+  };
+
+  handleGetConfirmed= (event) => {
+    this.setState({
+      confirmPassword : event.target.value,
+    })
+  };
+ 
+  handleRegister = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        alert(this.state.Email + this.state.Password)
+        ipcRenderer.send('register', this.state.Email, this.state.Password, this.state.confirmPassword);
+      }
+      else{
+        alert(err.message);
       }
     });
   }
@@ -97,7 +104,7 @@ class RegistrationForm extends React.Component {
     };
 
     return (
-      <Form onSubmit={this.handleSubmit} style={{ width: '60%', marginLeft: '18%', marginTop: '20%', marginBottom: '20%'}}>
+      <Form onSubmit={this.handleRegister} style={{ width: '60%', marginLeft: '18%', marginTop: '20%', marginBottom: '20%'}}>
         <FormItem
           {...formItemLayout}
           label="E-mail"
@@ -109,27 +116,7 @@ class RegistrationForm extends React.Component {
               required: true, message: 'Please input your E-mail!',
             }],
           })(
-            <Input />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={(
-            <span>
-              Username&nbsp;
-              <Tooltip title="The username display in Wallpaper Workshop">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-          )}
-          hasFeedback
-          validateStatus="validating"
-          help="Checking if the username is occupied"
-        >
-          {getFieldDecorator('nickname', {
-            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-          })(
-            <Input id="validating" />
+            <Input onChange={this.handleGetEmail}/>
           )}
         </FormItem>
         <FormItem
@@ -143,7 +130,7 @@ class RegistrationForm extends React.Component {
               validator: this.validateToNextPassword,
             }],
           })(
-            <Input type="password" />
+            <Input type="password" onChange={this.handleGetPassword}/>
           )}
         </FormItem>
         <FormItem
@@ -157,7 +144,7 @@ class RegistrationForm extends React.Component {
               validator: this.compareToFirstPassword,
             }],
           })(
-            <Input type="password" onBlur={this.handleConfirmBlur} />
+            <Input type="password" onBlur={this.handleConfirmBlur} onChange={this.handleGetConfirmed}/>
           )}
         </FormItem>
        
@@ -169,7 +156,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" href="/login">Register</Button>
+          <Button type="primary" htmlType="submit">Register</Button>
         </FormItem>
       </Form>
     );

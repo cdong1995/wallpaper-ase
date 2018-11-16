@@ -1,20 +1,44 @@
 import React from "react";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { NavLink } from "react-router-dom";
-
+// import { Redirect, BrowserRouter } from 'react-router-dom';
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
+  state = {
+    Username: "",
+    Password: "",
+  };
+  
+  componentDidMount(){
+    ipcRenderer.on('transitionToHome', () => {
+      this.props.history.push('/')
+    });
+  }
+  handleGetUsername = (event) => {
+    this.setState({
+      Username : event.target.value,
+    })
+  };
+
+  handleGetPassword = (event) => {
+    this.setState({
+      Password : event.target.value,
+    })
+  };
+ 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        // alert(this.state.Username + this.state.Password)
+        ipcRenderer.send('login', this.state.Username, this.state.Password);
       }
     });
   }
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -24,14 +48,14 @@ class NormalLoginForm extends React.Component {
           {getFieldDecorator('userName', {
             rules: [{ required: true, message: 'Please input your username!' }],
           })(
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" type="text" onChange={this.handleGetUsername}/>
           )}
         </FormItem>
         <FormItem>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Please input your Password!' }],
           })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" onChange={this.handleGetPassword}/>
           )}
         </FormItem>
         <FormItem>
@@ -44,7 +68,7 @@ class NormalLoginForm extends React.Component {
      
             <a className="login-form-forgot" href="" style={{float:'right'}}>Forgot password?</a>
           <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}} href="/">
+            <Button onClick={this.handleSubmit} type="primary" htmlType="submit" className="login-form-button" style={{width:'100%'}} >
                 Log in
             </Button>          
           </div>

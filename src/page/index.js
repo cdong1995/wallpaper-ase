@@ -18,6 +18,8 @@ const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const Search = Input.Search;
 
+
+
 export class SiderDemo extends React.Component {
     state = {
         collapsed: false,

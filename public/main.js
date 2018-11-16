@@ -4,7 +4,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const { spawn } = require("child_process");
-
+const firebase = require('firebase');
 const path = require('path');
 const fs = require('fs');
 const request = require("request");
@@ -20,31 +20,51 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase');
 
 let mainWindow;
-let imageWindow;
-let settingsWindow;
+let Uid;
+// let imageWindow;
+// let settingsWindow;
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAqgXt5GvALuuw2H6bXmS45_rU07z8Iy0E",
+    authDomain: "wallpater-ase.firebaseapp.com",
+    databaseURL: "https://wallpater-ase.firebaseio.com",
+    projectId: "wallpater-ase",
+    storageBucket: "wallpater-ase.appspot.com",
+    messagingSenderId: "412954877097"
+  };
+firebase.initializeApp(config);
+
+firebase.auth().onAuthStateChanged(User => {
+  if(User){
+    Uid = User.uid; 
+    console.log(User.email);
+  }
+  
+})
 
 
 function createWindow() {
   mainWindow = new BrowserWindow({width: 900, height: 680, webPreferences: { webSecurity: false}});
-  imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
-  settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
+  // imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
+  // settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
 
   mainWindow.loadURL(isDev ? 'http://localhost:3000/login' : `file://${path.join(__dirname, '../build/index.html')}`);
-  imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
-  settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
+  // imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
+  // settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
 
 
   mainWindow.on('closed', () => mainWindow = null);
 
-  imageWindow.on('close', (e) => {
-    e.preventDefault();
-    imageWindow.hide();
-  });
+  // imageWindow.on('close', (e) => {
+  //   e.preventDefault();
+  //   imageWindow.hide();
+  // });
 
-  settingsWindow.on('close', (e) => {
-    e.preventDefault();
-    settingsWindow.hide();
-  });
+  // settingsWindow.on('close', (e) => {
+  //   e.preventDefault();
+  //   settingsWindow.hide();
+  // });
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
   Menu.setApplicationMenu(mainMenu)
@@ -92,19 +112,19 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('toggle-image', (event, arg) => {
-  imageWindow.show();
-  imageWindow.webContents.send('image', arg);
-})
+// ipcMain.on('toggle-image', (event, arg) => {
+//   imageWindow.show();
+//   imageWindow.webContents.send('image', arg);
+// })
 
 
-ipcMain.on('toggle-settings', () => {
-  settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
-})
+// ipcMain.on('toggle-settings', () => {
+//   settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
+// })
 
-ipcMain.on('show-image', () => {
-  settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
-})
+// ipcMain.on('show-image', () => {
+//   settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
+// })
 
 ipcMain.on('upload-image', (event, image) => {
   upload(image);
@@ -180,3 +200,34 @@ ipcMain.on('search-image-result', (event, rawJsonResult) => {
   console.log(rawJsonResult.results);
   mainWindow.webContents.send('show-search-result', rawJsonResult.results)
 });
+
+
+ipcMain.on('login', (event, username, password) =>{
+  firebase.auth().signInWithEmailAndPassword(username, password).then(function(){
+    console.log("Login Success")
+    mainWindow.webContents.send('transitionToHome', url);
+  }).catch(function(error){
+    if(error != null){
+      console.log(error.message);
+      return;
+    }
+  });
+});
+
+ipcMain.on('register', (event, email, password, confirmed) =>{
+  // console.log("sdfsdf");
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+    console.log('Register Success');
+    mainWindow.webContents.send('transitionToLogin', url);
+  }).catch(function(error){
+    if(error != null){
+      console.log(error.message);
+      return;
+    }
+  });
+});
+
+
+
+
+
