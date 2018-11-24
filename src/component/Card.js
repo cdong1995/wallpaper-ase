@@ -62,9 +62,9 @@ export default class ShowCard extends React.Component{
                 style={{ width: 300 }}
                 cover={<img alt="example" src={picUrl} widht="300" height="180" />}
                 actions={
-                [<Icon type="heart" />, 
+                [<Icon type="heart" onClick={() => {ipcRenderer.send("like_image", picUrl)}}/>, 
                 <Icon type="folder-add"/>, 
-                <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", item._doc.url)}}/>]
+                <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", picUrl)}}/>]
             }
             >
             </Card>

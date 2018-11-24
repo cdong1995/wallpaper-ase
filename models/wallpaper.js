@@ -1,11 +1,12 @@
-/*
+
 const mongoose = require('mongoose')
 var wallpaperSchema = new mongoose.Schema({
-    url: String
+    url: String,
+    likes: Number
 });
 
 var UserSchema = new mongoose.Schema({
-    name: String,
+    uid: String,
     likePics: [{
         url: String
     }],
@@ -24,9 +25,3 @@ var Database ={
     user : mongoose.model('user', UserSchema)
 }
 module.exports = Database
-*/
-const mongoose = require('mongoose')
-var wallpaperSchema = new mongoose.Schema({
-    url: String
-});
-module.exports = mongoose.model('wallpaper', wallpaperSchema);

@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary');
-const Wallpaper = require('../../models/wallpaper');
+const Database = require('../../models/wallpaper');
 
 module.exports = (filePath) => {
     var url
@@ -13,7 +13,7 @@ module.exports = (filePath) => {
       url = result.secure_url
       let newWallpaper = {url : url}
       console.log(newWallpaper)
-      Wallpaper.create(newWallpaper, function(err, wallpaper){
+      Database.wallpaper.create(newWallpaper, function(err, wallpaper){
       if(err) console.log(err)
         else console.log(wallpaper)
       })
