@@ -15,6 +15,7 @@ const bson = require('bson')
 const cloudinary = require('cloudinary');
 const Database = require('../models/wallpaper');
 const upload = require('./lib/upload');
+const AutoChanger = require('./lib/autoChanger')
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase');
@@ -77,6 +78,12 @@ const mainMenuTemplate =  [
         accelerator:process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
         click(){
           app.quit();
+        }
+      },
+      {
+        label: 'AutoChanger',
+        click(){
+          AutoChanger();
         }
       }
     ]
@@ -161,7 +168,7 @@ ipcMain.on('show-image', (event, filePath) => {
 
 ipcMain.on('download-image', (event, filePath) => {
   return new Promise((resolve, reject) => {
-    const tempDir = path.join(__dirname, "..");
+    const tempDir = path.join(__dirname, "../../wallpapers");
     const tempFileName = `temp${Date.now()}.jpg`;
     const tempFilePath = path.join(tempDir, tempFileName);
     const writeFileTo = fs.createWriteStream(path.join(tempDir, tempFileName));
@@ -179,12 +186,12 @@ ipcMain.on('download-image', (event, filePath) => {
       script.on("close", resolve);
     });
   })
-
 })
-
+ 
 ipcMain.on('search-image-result', (event, rawJsonResult) => {
   console.log(rawJsonResult.results);
   mainWindow.webContents.send('show-search-result', rawJsonResult.results)
+
 });
 
 
@@ -258,8 +265,4 @@ ipcMain.on('collect_image', (event, wid) =>{
           }
       });
 });
-
-
-
-
-
+  
