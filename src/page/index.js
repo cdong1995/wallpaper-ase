@@ -4,10 +4,14 @@ import ShowCard from "../component/Card";
 import {Link, Route, Switch, Redirect, NavLink, HashRouter} from "react-router-dom";
 import Uploads from "./upload";
 import Likes from "./likes";
+import Collections from "./collection";
 import Home from "./home";
+import Login from "./login";
+import Register from "./register";
 
 import unsplash from '../services/unsplash';
 import {toJson} from 'unsplash-js';
+import { Collection } from 'mongoose';
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -15,6 +19,8 @@ const ipcRenderer = electron.ipcRenderer;
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const Search = Input.Search;
+
+
 
 export class SiderDemo extends React.Component {
     state = {
@@ -69,7 +75,7 @@ export class SiderDemo extends React.Component {
                             <span className="nav-text">Upload</span>
                             <NavLink to="/upload"></NavLink>
                         </Menu.Item>
-                        {/* <Menu.Item key="3">
+                         <Menu.Item key="3">
                             <Icon type="heart" theme="outlined"/>
                             <span className="nav-text">Likes</span>
                             <NavLink to="/likes"></NavLink>
@@ -77,11 +83,13 @@ export class SiderDemo extends React.Component {
                         <Menu.Item key="4">
                             <Icon type="folder" theme="outlined" />
                             <span className="nav-text">Collection</span>
+                            <NavLink to="/collection"></NavLink>
                         </Menu.Item>
                         <Menu.Item key="5">
                             <Icon type="setting" theme="outlined" />
                             <span className="nav-text">Setting</span>
-                        </Menu.Item> */}
+                            <NavLink to="/setting"></NavLink>
+                        </Menu.Item> 
                     </Menu>
                 </Sider>
                 <Layout style={{ marginLeft: 200 }}>
@@ -96,6 +104,8 @@ export class SiderDemo extends React.Component {
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/upload" component={Uploads}/>
                                 <Route path="/likes" component={Likes}/>
+                                <Route path="/collection" component={Collections}/>
+                                <Route path="/setting" component={Login}/>
                             </Switch>
                         </div>
                     </Content>

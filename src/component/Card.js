@@ -49,24 +49,38 @@ export default class ShowCard extends React.Component{
     // }
     render(){
         const { item } = this.props;
+        console.log("item"+item)
         var picUrl;
+        var numLikes;
+        var author = "Jianing";
+        var numCollects;
+        var wid;
         if (item.hasOwnProperty("_doc")){
             picUrl = item._doc.url;
+            numLikes = item._doc.likes;
+            wid = item._doc._id
         } else if (item.hasOwnProperty("urls")){
             picUrl = item.urls.full;
-        }
+        } else if(item.hasOwnProperty("url")){
+            picUrl = item.url;
+        } 
+        console.log("hello"+picUrl)
         
         return (
             <div>
             <Card
                 style={{ width: 300 }}
-                cover={<img alt="example" src={picUrl} />}
+                cover={<img alt="example" src={picUrl} widht="300" height="180" />}
                 actions={
-                [<Icon type="heart" />, 
-                <Icon type="folder-add"/>, 
-                <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", item._doc.url)}}/>]
+                [<Icon type="heart" onClick={() => {ipcRenderer.send("like_image", wid)}}/>, 
+                <Icon type="folder-add" onClick={() => {ipcRenderer.send("collect_image", wid)}}/>, 
+                <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", picUrl)}}/>]
             }
             >
+            <Meta
+                title={"Author:  "+author}
+                description={numLikes+"  Likes"}
+            />
             </Card>
 
             </div>

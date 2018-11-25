@@ -40,8 +40,8 @@ class Uploads extends React.Component {
       } 
 
     componentDidMount(){
-        ipcRenderer.send('request-image','all');
-        ipcRenderer.on('show-all-image',(event, arg) => {
+        ipcRenderer.send('request-image','uploads');
+        ipcRenderer.on('show-uploads-image',(event, arg) => {
             this.setState({
                 posts: arg
             })

@@ -1,7 +1,8 @@
 const cloudinary = require('cloudinary');
-const Wallpaper = require('../../models/wallpaper');
+const Database = require('../../models/wallpaper');
+const mongoose = require('mongoose')
 
-module.exports = (filePath) => {
+module.exports = (filePath,Uid) => {
     var url
     // cloudinary config
     cloudinary.config({ 
@@ -11,11 +12,24 @@ module.exports = (filePath) => {
     });
     cloudinary.uploader.upload(filePath, (result) => {
       url = result.secure_url
-      let newWallpaper = {url : url}
+      let newWallpaper = {_id: new mongoose.Types.ObjectId(), url : url}
       console.log(newWallpaper)
-      Wallpaper.create(newWallpaper, function(err, wallpaper){
+      Database.wallpaper.create(newWallpaper, function(err, wallpaper){
       if(err) console.log(err)
-        else console.log(wallpaper)
+      else{
+        console.log(wallpaper)
+        console.log("enter")
+        console.log(wallpaper._id.toString())
+        console.log(typeof wallpaper._id.toString())
+        console.log("leave")
+          Database.user.findOneAndUpdate({uid: Uid},
+            {$push: {uploadPics: wallpaper._id.toString()}}, function(err, user){
+              if(err) console.log(err)
+              else {
+                console.log(user)
+              }
+            });
+      } 
       })
     })
 }

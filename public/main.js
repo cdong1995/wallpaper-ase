@@ -4,16 +4,16 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const { spawn } = require("child_process");
-
+const firebase = require('firebase');
 const path = require('path');
 const fs = require('fs');
 const request = require("request");
-// const wallpaper = require('wallpaper');
 const url = require('url');
 const isDev = require('electron-is-dev');
+const bson = require('bson')
 
 const cloudinary = require('cloudinary');
-const Wallpaper = require('../models/wallpaper');
+const Database = require('../models/wallpaper');
 const upload = require('./lib/upload');
 const AutoChanger = require('./lib/autoChanger')
 
@@ -21,31 +21,36 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://cdong1995:dc196828zxzqzl@ds125453.mlab.com:25453/wallpaper-ase');
 
 let mainWindow;
-let imageWindow;
-let settingsWindow;
+let Uid;
+// let imageWindow;
+// let settingsWindow;
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAqgXt5GvALuuw2H6bXmS45_rU07z8Iy0E",
+    authDomain: "wallpater-ase.firebaseapp.com",
+    databaseURL: "https://wallpater-ase.firebaseio.com",
+    projectId: "wallpater-ase",
+    storageBucket: "wallpater-ase.appspot.com",
+    messagingSenderId: "412954877097"
+  };
+firebase.initializeApp(config);
+
+firebase.auth().onAuthStateChanged(User => {
+  if(User){
+    Uid = User.uid; 
+    console.log("Current: " + User.uid);
+  }
+  
+})
 
 
 function createWindow() {
   mainWindow = new BrowserWindow({width: 900, height: 680, webPreferences: { webSecurity: false}});
-  imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
-  settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-  imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
-  settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
-
+  mainWindow.loadURL(isDev ? 'http://localhost:3000/login' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   mainWindow.on('closed', () => mainWindow = null);
-
-  imageWindow.on('close', (e) => {
-    e.preventDefault();
-    imageWindow.hide();
-  });
-
-  settingsWindow.on('close', (e) => {
-    e.preventDefault();
-    settingsWindow.hide();
-  });
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
   Menu.setApplicationMenu(mainMenu)
@@ -99,31 +104,47 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('toggle-image', (event, arg) => {
-  imageWindow.show();
-  imageWindow.webContents.send('image', arg);
-})
-
-
-ipcMain.on('toggle-settings', () => {
-  settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
-})
-
-ipcMain.on('show-image', () => {
-  settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
-})
-
 ipcMain.on('upload-image', (event, image) => {
-  upload(image);
+  upload(image,Uid);
 })
 
 ipcMain.on('request-image', (event, type) => {
-  Wallpaper.find({}, function(err, allWallpapers) {
-    if(err) console.log(err)
-    else {
-        mainWindow.webContents.send('show-all-image',allWallpapers)     
-    }
-  })
+  if(type==="all"){
+    Database.wallpaper.find({}, function(err, allWallpapers) {
+      if(err) console.log(err)
+      else {
+        console.log(allWallpapers)
+          mainWindow.webContents.send('show-all-image',allWallpapers)     
+      }
+    })
+  }
+  else if(type==="likes"){
+    Database.user.findOne({uid:Uid}).populate("likePics").exec(function(err, wallpapers){     
+      if(err) console.log(err)
+      else {
+        console.log(wallpapers)
+        console.log(wallpapers.likePics)
+        mainWindow.webContents.send('show-likes-image', wallpapers.likePics) 
+      }
+    })
+  }
+  else if(type=="collections"){
+    Database.user.findOne({uid:Uid}).populate("collectPics").exec(function(err, wallpapers){     
+      if(err) console.log(err)
+      else {
+        console.log(wallpapers)
+        console.log(wallpapers.collectPics)
+        mainWindow.webContents.send('show-collections-image', wallpapers.collectPics) 
+      }
+    })
+  }else if(type=="uploads"){
+    Database.user.findOne({uid:Uid}).populate("uploadPics").exec(function(err, wallpapers){     
+      if(err) console.log(err)
+      else {
+        mainWindow.webContents.send('show-uploads-image', wallpapers.uploadPics) 
+      }
+    })
+  }
 })
 
 ipcMain.on('show-image', (event, filePath) => {
@@ -138,7 +159,7 @@ ipcMain.on('show-image', (event, filePath) => {
     url = result.secure_url
     let newWallpaper = {url : url}
     console.log(newWallpaper)
-    Wallpaper.create(newWallpaper, function(err, wallpaper){
+    Database.wallpaper.create(newWallpaper, function(err, wallpaper){
     if(err) console.log(err)
       else console.log(wallpaper)
     })
@@ -146,7 +167,6 @@ ipcMain.on('show-image', (event, filePath) => {
 })
 
 ipcMain.on('download-image', (event, filePath) => {
-
   return new Promise((resolve, reject) => {
     const tempDir = path.join(__dirname, "../../wallpapers");
     const tempFileName = `temp${Date.now()}.jpg`;
@@ -171,4 +191,78 @@ ipcMain.on('download-image', (event, filePath) => {
 ipcMain.on('search-image-result', (event, rawJsonResult) => {
   console.log(rawJsonResult.results);
   mainWindow.webContents.send('show-search-result', rawJsonResult.results)
-});  
+
+});
+
+
+ipcMain.on('login', (event, username, password) =>{
+  //dev mode
+  username="y@qq.com"
+  password="111111"
+  firebase.auth().signInWithEmailAndPassword(username, password).then(function(){
+    console.log("Login Success")
+    mainWindow.webContents.send('transitionToHome', url);
+  }).catch(function(error){
+    if(error != null){
+      console.log(error.message);
+      return;
+    }
+  });
+});
+
+ipcMain.on('register', (event, email, password, confirmed) =>{
+  // console.log("sdfsdf");
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(userData){
+    console.log('Register Success');
+    mainWindow.webContents.send('transitionToLogin', url);
+    let newUser = {uid : userData.user.uid}
+    Database.user.create(newUser, function(err, user){
+        if(err) console.log(err)
+        else console.log("Successfully add: " + user.uid)
+    })
+  }).catch(function(error){
+    if(error != null){
+      console.log(error.message);
+      return;
+    }
+  });
+});
+
+ipcMain.on('like_image', (event, wid) =>{
+  var widid=new Buffer(wid.id, 'hex').toString('hex')
+    Database.user.findOneAndUpdate({uid: Uid},
+      {$push: {likePics: widid}}, function(err, user){
+        if(err) console.log(err)
+        else {
+          console.log(Uid + " likes this picture");
+        }
+      });
+    
+    Database.wallpaper.findOneAndUpdate({_id: widid},
+      {$inc: {likes: 1}}, function(err, user){
+          if(err) console.log(err)
+          else {
+              console.log("Likes + 1");
+          }
+      });
+});
+
+ipcMain.on('collect_image', (event, wid) =>{
+  var widid=new Buffer(wid.id, 'hex').toString('hex')
+    Database.user.findOneAndUpdate({uid: Uid},
+      {$push: {collectPics: widid}}, function(err, user){
+        if(err) console.log(err)
+        else {
+          console.log(Uid + " likes this picture");
+        }
+      });
+    
+    Database.wallpaper.findOneAndUpdate({_id: widid},
+      {$inc: {collects: 1}}, function(err, user){
+          if(err) console.log(err)
+          else {
+              console.log("Collects + 1");
+          }
+      });
+});
+  
