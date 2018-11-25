@@ -19,7 +19,6 @@ class Home extends React.Component {
                 posts: arg
             })
             console.log(this.state.posts)
-            console
         })
         
         

@@ -8,7 +8,6 @@ const firebase = require('firebase');
 const path = require('path');
 const fs = require('fs');
 const request = require("request");
-// const wallpaper = require('wallpaper');
 const url = require('url');
 const isDev = require('electron-is-dev');
 
@@ -102,12 +101,55 @@ ipcMain.on('upload-image', (event, image) => {
 })
 
 ipcMain.on('request-image', (event, type) => {
-  Database.wallpaper.find({}, function(err, allWallpapers) {
-    if(err) console.log(err)
-    else {
-        mainWindow.webContents.send('show-all-image',allWallpapers)     
-    }
-  })
+  if(type==="all"){
+    Database.wallpaper.find({}, function(err, allWallpapers) {
+      if(err) console.log(err)
+      else {
+          mainWindow.webContents.send('show-all-image',allWallpapers)     
+      }
+    })
+  }
+  else if(type==="likes"){
+    console.log("enter likes")
+    Database.user.findOne({uid:Uid},function(err, wallpapers){     
+      if(err) console.log(err)
+      else {
+        var likesWallpapers =wallpapers.likePics
+        console.log(likesWallpapers)
+        console.log(likesWallpapers.type)
+        var lists={}
+        console.log(likesWallpapers[0])
+        console.log(likesWallpapers[1])
+        var i
+        for (i=0;i<likesWallpapers.length;i++){
+          id=likesWallpapers[i].id
+          console.log(id)
+          Database.wallpaper.findById(id,function (err, wp) {
+            if(err) console.log(err)
+            else{
+              console.log("wp"+wp)
+              lists[i]=wp
+            }
+            
+          });  
+        }
+        console.log("i"+i)
+        if(i >= likesWallpapers.length){
+          console.log(lists)
+          mainWindow.webContents.send('show-likes-image', lists)
+        }
+
+        console.log("lists"+lists)
+        // var l = ["1", "2"]
+        // mainWindow.webContents.send('show-likes-image', lists)    
+      }  
+      });
+  }
+  else if(type=="collections"){
+
+  }else if(type=="uploads"){
+
+  }
 })
 
 ipcMain.on('show-image', (event, filePath) => {
@@ -130,7 +172,6 @@ ipcMain.on('show-image', (event, filePath) => {
 })
 
 ipcMain.on('download-image', (event, filePath) => {
-
   return new Promise((resolve, reject) => {
     const tempDir = path.join(__dirname, "..");
     const tempFileName = `temp${Date.now()}.jpg`;
@@ -160,6 +201,9 @@ ipcMain.on('search-image-result', (event, rawJsonResult) => {
 
 
 ipcMain.on('login', (event, username, password) =>{
+  //dev mode
+  username="y@qq.com"
+  password="111111"
   firebase.auth().signInWithEmailAndPassword(username, password).then(function(){
     console.log("Login Success")
     mainWindow.webContents.send('transitionToHome', url);

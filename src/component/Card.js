@@ -49,12 +49,20 @@ export default class ShowCard extends React.Component{
     // }
     render(){
         const { item } = this.props;
+        console.log("item"+item)
         var picUrl;
+        var numLikes;
+        var author = "Jianing";
+        var numCollects;
         if (item.hasOwnProperty("_doc")){
             picUrl = item._doc.url;
+            numLikes = item._doc.likes;
         } else if (item.hasOwnProperty("urls")){
             picUrl = item.urls.full;
-        }
+        } else if(item.hasOwnProperty("url")){
+            picUrl = item.url;
+        } 
+        console.log("hello"+picUrl)
         
         return (
             <div>
@@ -67,6 +75,10 @@ export default class ShowCard extends React.Component{
                 <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", picUrl)}}/>]
             }
             >
+            <Meta
+                title={"Author:  "+author}
+                description={numLikes+"  Likes"}
+            />
             </Card>
 
             </div>

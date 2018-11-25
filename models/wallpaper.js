@@ -4,24 +4,28 @@ var wallpaperSchema = new mongoose.Schema({
     url: String,
     likes: Number
 });
+var wallpaper = mongoose.model('wallpaper', wallpaperSchema);
+
 
 var UserSchema = new mongoose.Schema({
     uid: String,
     likePics: [{
-        url: String
+        id: String
     }],
     collectPics: [{
+        // type :  mongoose.Schema.Types.ObjectId,
+        // ref : 'wallpaper'
         url: String
     }],
     uploadPics: [{
         url: String
     }],
-
-
 });
 
+var user = mongoose.model('user', UserSchema);
+
 var Database ={
-    wallpaper : mongoose.model('wallpaper', wallpaperSchema),
-    user : mongoose.model('user', UserSchema)
+    wallpaper,
+    user
 }
 module.exports = Database

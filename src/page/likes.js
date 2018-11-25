@@ -1,20 +1,52 @@
 import React from "react";
-// import { Upload, message, Button, Icon } from 'antd';
-import ShowCard from '../component/Card'
+import CardList from '../component/CardList'
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 
 class Likes extends React.Component {
-    state = {
-        posts: []
-    }
+    constructor(){
+        super()
+        this.state={
+            posts:[]
+        }
+    }  
 
-    render(){
+    componentDidMount(){
+        ipcRenderer.send('request-image','likes');
+        ipcRenderer.on('show-likes-image',(event, arg) => {
+            console.log(arg)
+            this.setState({
+                posts: arg
+            })
+            console.log(this.state.posts)
+        })
+        
+        
+        /*console.log("SKJKEJTEJWLAT");
+        axios.get("https://reddit.com/r/aww.json")
+            .then(response => {
+                this.setState({
+                    posts: response.data.data.children
+                })      
+            })  
+            .catch(error => {
+                    console.log(error);
+            });
+        console.log(this.state.posts);
+        */
+
+       ipcRenderer.on('show-search-result',(event, arg) => {
+        this.setState({
+            posts: arg
+        });
+        
+    });
+    }
+    render(){       
         return (
-            <div>
-                        
-                <ShowCard/>         
+            <div>      
+                <CardList pics={this.state.posts} />         
             </div>
         );
     }
