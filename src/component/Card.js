@@ -54,9 +54,11 @@ export default class ShowCard extends React.Component{
         var numLikes;
         var author = "Jianing";
         var numCollects;
+        var wid;
         if (item.hasOwnProperty("_doc")){
             picUrl = item._doc.url;
             numLikes = item._doc.likes;
+            wid = item._doc._id
         } else if (item.hasOwnProperty("urls")){
             picUrl = item.urls.full;
         } else if(item.hasOwnProperty("url")){
@@ -70,8 +72,8 @@ export default class ShowCard extends React.Component{
                 style={{ width: 300 }}
                 cover={<img alt="example" src={picUrl} widht="300" height="180" />}
                 actions={
-                [<Icon type="heart" onClick={() => {ipcRenderer.send("like_image", picUrl)}}/>, 
-                <Icon type="folder-add"/>, 
+                [<Icon type="heart" onClick={() => {ipcRenderer.send("like_image", wid)}}/>, 
+                <Icon type="folder-add" onClick={() => {ipcRenderer.send("collect_image", wid)}}/>, 
                 <Icon type="setting" onClick={() => {ipcRenderer.send("download-image", picUrl)}}/>]
             }
             >

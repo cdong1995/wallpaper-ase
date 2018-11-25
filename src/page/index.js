@@ -4,12 +4,14 @@ import ShowCard from "../component/Card";
 import {Link, Route, Switch, Redirect, NavLink, HashRouter} from "react-router-dom";
 import Uploads from "./upload";
 import Likes from "./likes";
+import Collections from "./collection";
 import Home from "./home";
 import Login from "./login";
 import Register from "./register";
 
 import unsplash from '../services/unsplash';
 import {toJson} from 'unsplash-js';
+import { Collection } from 'mongoose';
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -102,7 +104,7 @@ export class SiderDemo extends React.Component {
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/upload" component={Uploads}/>
                                 <Route path="/likes" component={Likes}/>
-                                <Route path="/collection" component={Register}/>
+                                <Route path="/collection" component={Collections}/>
                                 <Route path="/setting" component={Login}/>
                             </Switch>
                         </div>

@@ -1,6 +1,8 @@
 
 const mongoose = require('mongoose')
 var wallpaperSchema = new mongoose.Schema({
+    //_id:String,
+    _id: mongoose.Schema.Types.ObjectId,
     url: String,
     likes: Number
 });
@@ -9,16 +11,17 @@ var wallpaper = mongoose.model('wallpaper', wallpaperSchema);
 
 var UserSchema = new mongoose.Schema({
     uid: String,
-    likePics: [{
-        id: String
+    likePics: [{        
+        type :  mongoose.Schema.Types.ObjectId,
+        ref : 'wallpaper'      
     }],
-    collectPics: [{
-        // type :  mongoose.Schema.Types.ObjectId,
-        // ref : 'wallpaper'
-        url: String
+    collectPics: [{       
+        type :  mongoose.Schema.Types.ObjectId,
+        ref : 'wallpaper'
     }],
-    uploadPics: [{
-        url: String
+    uploadPics: [{         
+        type :  mongoose.Schema.Types.ObjectId,
+        ref : 'wallpaper'
     }],
 });
 
