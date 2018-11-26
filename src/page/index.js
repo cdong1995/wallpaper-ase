@@ -6,6 +6,7 @@ import Uploads from "./upload";
 import Likes from "./likes";
 import Collections from "./collection";
 import Home from "./home";
+import Setting from "./setting";
 import Login from "./login";
 import Register from "./register";
 
@@ -105,7 +106,7 @@ export class SiderDemo extends React.Component {
                                 <Route path="/upload" component={Uploads}/>
                                 <Route path="/likes" component={Likes}/>
                                 <Route path="/collection" component={Collections}/>
-                                <Route path="/setting" component={Login}/>
+                                <Route path="/setting" component={Setting}/>
                             </Switch>
                         </div>
                     </Content>

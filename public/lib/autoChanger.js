@@ -5,7 +5,7 @@ const later = require('later')
 const tempDir = path.join(__dirname, "../../wallpapers");
 let files = finder.in(tempDir).findFiles("*.<(jpg|jpeg|png|bmp|gif|tiff)>");
 
-let text = 'every 1 minutes';
+let text = 'every 10 second';
 let s = later.parse.text(text);
 later.date.localTime();
 

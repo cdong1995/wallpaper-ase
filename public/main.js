@@ -80,12 +80,12 @@ const mainMenuTemplate =  [
           app.quit();
         }
       },
-      {
-        label: 'AutoChanger',
-        click(){
-          AutoChanger();
-        }
-      }
+      // {
+      //   label: 'AutoChanger',
+      //   click(){
+      //     AutoChanger();
+      //   }
+      // }
     ]
   }
 ];
@@ -264,5 +264,10 @@ ipcMain.on('collect_image', (event, wid) =>{
               console.log("Collects + 1");
           }
       });
+});
+
+ipcMain.on('change_period', (event,fre,msr) =>{
+  console.log("every"+fre+msr)
+  AutoChanger();
 });
   
