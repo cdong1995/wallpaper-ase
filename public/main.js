@@ -197,8 +197,8 @@ ipcMain.on('search-image-result', (event, rawJsonResult) => {
 
 ipcMain.on('login', (event, username, password) =>{
   //dev mode
-  username="y@qq.com"
-  password="111111"
+  //username="y@qq.com"
+  //password="111111"
   firebase.auth().signInWithEmailAndPassword(username, password).then(function(){
     console.log("Login Success")
     mainWindow.webContents.send('transitionToHome', url);
@@ -230,47 +230,54 @@ ipcMain.on('register', (event, email, password, confirmed) =>{
 
 ipcMain.on('like_image', (event, wid) =>{
   var widid=new Buffer(wid.id, 'hex').toString('hex')
-    Database.user.findOneAndUpdate({uid: Uid},
-      {$push: {likePics: widid}}, function(err, user){
-        if(err) console.log(err)
-        else {
-          console.log(Uid + " likes this picture");
-        }
-      });
-    
-    Database.wallpaper.findOneAndUpdate({_id: widid},
-      {$inc: {likes: 1}}, function(err, user){
+  Database.user.findOne({uid: Uid},function(err,res){
+    console.log(res.likePics)
+    if(res.likePics.indexOf(widid)<0){
+      Database.user.findOneAndUpdate({uid: Uid},
+        {$push: {likePics: widid}}, function(err, user){
           if(err) console.log(err)
           else {
-              console.log("Likes + 1");
+            console.log(Uid + " likes this picture");
           }
-      });
+        });
+      
+      Database.wallpaper.findOneAndUpdate({_id: widid},
+        {$inc: {likes: 1}}, function(err, user){
+            if(err) console.log(err)
+            else {
+                console.log("Likes + 1");
+            }
+        });
+    }       
+  });
 });
 
 ipcMain.on('collect_image', (event, wid) =>{
   var widid=new Buffer(wid.id, 'hex').toString('hex')
-    Database.user.findOneAndUpdate({uid: Uid},
-      {$push: {collectPics: widid}}, function(err, user){
-        if(err) console.log(err)
-        else {
-          console.log(Uid + " likes this picture");
-        }
-      });
-    
-    Database.wallpaper.findOneAndUpdate({_id: widid},
-      {$inc: {collects: 1}}, function(err, user){
-          if(err) console.log(err)
-          else {
-              console.log("Collects + 1");
-          }
-      });
+    Database.user.findOne({uid: Uid},function(err,res){
+      console.log(res.collectPics)
+      if(res.collectPics.indexOf(widid)<0){
+        Database.user.findOneAndUpdate({uid: Uid},
+          {$push: {collectPics: widid}}, function(err, user){
+            if(err) console.log(err)
+            else {
+              console.log(Uid + " collects this picture");
+            }
+          });
+        
+        Database.wallpaper.findOneAndUpdate({_id: widid},
+          {$inc: {collects: 1}}, function(err, user){
+              if(err) console.log(err)
+              else {
+                  console.log("Collects + 1");
+              }
+          });
+      }       
+    });
 });
 
 ipcMain.on('change_period', (event,fre,msr) =>{ 
-  if (fre!==1){
-    msr=msr+'s'
-  }
-  console.log("every"+fre+msr)
-  AutoChanger();
+  console.log("every "+fre+" "+msr)
+  AutoChanger("every "+fre+" "+msr);
 });
   

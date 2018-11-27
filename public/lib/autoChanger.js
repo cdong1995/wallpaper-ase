@@ -1,15 +1,16 @@
 const finder = require('fs-finder')
 const path = require('path')
 const later = require('later')
+const { spawn } = require("child_process")
 
 const tempDir = path.join(__dirname, "../../wallpapers");
 let files = finder.in(tempDir).findFiles("*.<(jpg|jpeg|png|bmp|gif|tiff)>");
 
-let text = 'every 1 minutes';
-let s = later.parse.text(text);
-later.date.localTime();
 
 function changer() {
+
+    //let text = 'every 1 minutes';
+
     return new Promise((resolve, reject) => {
         tempFilePath = getRandom(files)
         console.log(tempFilePath)
@@ -18,7 +19,7 @@ function changer() {
             `tell application "Finder" to set desktop picture to POSIX file "${tempFilePath}"`
           ]);
         script.on("close", resolve);
-        //script.on("close", reject);
+        script.on("close", reject);
     })
     // console.log()
 }
@@ -36,4 +37,8 @@ function getRandom(obj) {
     throw new Error('unknonw type');
 }
 
-module.exports = () => {timer = later.setInterval(changer, s)}
+module.exports = (text) => {
+    let s = later.parse.text(text);
+    later.date.localTime();
+    timer = later.setInterval(changer, s)
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { NavLink } from "react-router-dom";
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const FormItem = Form.Item;
@@ -157,7 +158,9 @@ class RegistrationForm extends React.Component {
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">Register</Button>
+          <NavLink to="/login"> Go back to login!</NavLink>
         </FormItem>
+        
       </Form>
     );
   }

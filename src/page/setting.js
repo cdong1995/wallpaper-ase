@@ -36,12 +36,12 @@ class Setting extends React.Component {
                 <br/>
                 Every
                 <InputNumber min={1} max={100} defaultValue={3} onChange={this.handleChange1} />
-                <Select defaultValue="minute" style={{ width: 120 }} onChange={this.handleChange2}>
-                    <Option value="second">second</Option>
-                    <Option value="minute">minute</Option>
-                    <Option value="hour">hour</Option>
-                    <Option value="day">day</Option>
-                    <Option value="week">week</Option>
+                <Select defaultValue="minutes" style={{ width: 120 }} onChange={this.handleChange2}>
+                    <Option value="seconds">seconds</Option>
+                    <Option value="minutes">minutes</Option>
+                    <Option value="hours">hours</Option>
+                    <Option value="days">days</Option>
+                    <Option value="weeks">weeks</Option>
                 </Select>
                 <Button type="primary"  onClick={this.setPeriod}>Set!</Button>
             </div>

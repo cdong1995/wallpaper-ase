@@ -34,17 +34,6 @@ export class SiderDemo extends React.Component {
     }
 
     onSearch = (keyword) => {
-        // console.log(keyword);
-        // ipcRenderer.send('search-image', keyword);
-
-        // const authenticationUrl = unsplash.auth.getAuthenticationUrl([
-        //     'public',
-        //     'read_photos'
-        // ]);
-        //
-        // window.location.assign(authenticationUrl);
-
-        // console.log(unsplash);
 
         unsplash.search.photos(keyword, 1, 20)
             .catch(err => {

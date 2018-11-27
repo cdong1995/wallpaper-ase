@@ -58,6 +58,7 @@ export default class ShowCard extends React.Component{
         if (item.hasOwnProperty("_doc")){
             picUrl = item._doc.url;
             numLikes = item._doc.likes;
+            numCollects = item._doc.collects;
             wid = item._doc._id
         } else if (item.hasOwnProperty("urls")){
             picUrl = item.urls.full;
@@ -79,7 +80,7 @@ export default class ShowCard extends React.Component{
             >
             <Meta
                 title={"Author:  "+author}
-                description={numLikes+"  Likes"}
+                description={numLikes+"  Likes     "+numCollects+"  Collects"}
             />
             </Card>
 
