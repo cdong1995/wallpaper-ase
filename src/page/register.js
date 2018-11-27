@@ -43,7 +43,6 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        alert(this.state.Email + this.state.Password)
         ipcRenderer.send('register', this.state.Email, this.state.Password, this.state.confirmPassword);
       }
       else{

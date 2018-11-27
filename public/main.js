@@ -277,7 +277,6 @@ ipcMain.on('collect_image', (event, wid) =>{
 });
 
 ipcMain.on('change_period', (event,fre,msr) =>{ 
-  console.log("every "+fre+" "+msr)
   AutoChanger("every "+fre+" "+msr);
 });
   
