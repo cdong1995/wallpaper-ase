@@ -5,19 +5,20 @@ const later = require('later')
 const tempDir = path.join(__dirname, "../../wallpapers");
 let files = finder.in(tempDir).findFiles("*.<(jpg|jpeg|png|bmp|gif|tiff)>");
 
-let text = 'every 10 second';
+let text = 'every 1 minutes';
 let s = later.parse.text(text);
 later.date.localTime();
 
 function changer() {
     return new Promise((resolve, reject) => {
         tempFilePath = getRandom(files)
+        console.log(tempFilePath)
         const script = spawn("osascript", [
             "-e",
             `tell application "Finder" to set desktop picture to POSIX file "${tempFilePath}"`
           ]);
         script.on("close", resolve);
-        script.on("close", reject);
+        //script.on("close", reject);
     })
     // console.log()
 }

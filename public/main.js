@@ -80,12 +80,12 @@ const mainMenuTemplate =  [
           app.quit();
         }
       },
-      // {
-      //   label: 'AutoChanger',
-      //   click(){
-      //     AutoChanger();
-      //   }
-      // }
+      {
+        label: 'AutoChanger',
+        click(){
+          AutoChanger();
+        }
+      }
     ]
   }
 ];
@@ -168,7 +168,7 @@ ipcMain.on('show-image', (event, filePath) => {
 
 ipcMain.on('download-image', (event, filePath) => {
   return new Promise((resolve, reject) => {
-    const tempDir = path.join(__dirname, "../../wallpapers");
+    const tempDir = path.join(__dirname, "../wallpapers");
     const tempFileName = `temp${Date.now()}.jpg`;
     const tempFilePath = path.join(tempDir, tempFileName);
     const writeFileTo = fs.createWriteStream(path.join(tempDir, tempFileName));
@@ -266,7 +266,10 @@ ipcMain.on('collect_image', (event, wid) =>{
       });
 });
 
-ipcMain.on('change_period', (event,fre,msr) =>{
+ipcMain.on('change_period', (event,fre,msr) =>{ 
+  if (fre!==1){
+    msr=msr+'s'
+  }
   console.log("every"+fre+msr)
   AutoChanger();
 });
