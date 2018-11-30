@@ -12,7 +12,7 @@ var UserSchema = new mongoose.Schema({
     uploadPics: [{         
         type :  mongoose.Schema.Types.ObjectId,
         ref : 'wallpaper'
-    }],
+    }]
 });
 
 module.exports = mongoose.model('user', UserSchema);

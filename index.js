@@ -59,6 +59,56 @@ app.get('/wallpapers/likes', (req, res) => {
     })   
 })
 
+app.post('/addLike', (req, resp) => {
+  var wid=req.body.wid
+  User.findOne({uid: Uid},function(err,res){
+    console.log(res.likePics)
+    if(res.likePics.indexOf(wid)<0){
+      User.findOneAndUpdate({uid: Uid},
+        {$push: {likePics: wid}}, function(err, user){
+          if(err) console.log(err)
+          else {
+            console.log(Uid + " likes this picture");
+          }
+        });
+      
+      Wallpaper.findOneAndUpdate({_id: wid},
+        {$inc: {likes: 1}}, function(err, user){
+            if(err) console.log(err)
+            else {
+              console.log("success")
+              resp.send("success")
+            }
+        });
+    }  
+  });   
+})
+
+app.post('/addCollect', (req, resp) => {
+  var wid=req.body.wid
+  User.findOne({uid: Uid},function(err,res){
+    console.log(res.collectPics)
+    if(res.collectPics.indexOf(wid)<0){
+      User.findOneAndUpdate({uid: Uid},
+        {$push: {collectPics: wid}}, function(err, user){
+          if(err) console.log(err)
+          else {
+            console.log(Uid + " collects this picture");
+          }
+        });
+      
+      Wallpaper.findOneAndUpdate({_id: wid},
+        {$inc: {collects: 1}}, function(err, user){
+            if(err) console.log(err)
+            else {
+              console.log("success")
+              resp.send("success")
+            }
+        });
+    }  
+  });   
+})
+
 app.get('/wallpapers/collections', (req, res) => {
     User.findOne({uid:Uid}).populate("collectPics").exec(function(err, wallpapers){     
       if(err) console.log(err)
