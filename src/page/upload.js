@@ -1,6 +1,7 @@
 import React from "react";
 import { Upload, message, Button, Icon, Modal } from 'antd';
-import CardList from '../component/CardList'
+import CardList from '../component/CardList';
+import axios from 'axios';
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -40,14 +41,16 @@ class Uploads extends React.Component {
       } 
 
     componentDidMount(){
-        ipcRenderer.send('request-image','uploads');
-        ipcRenderer.on('show-uploads-image',(event, arg) => {
+        axios.get("http://localhost:8000/wallpapers/upload")
+        .then(response => {
             this.setState({
-                posts: arg
-            })
-            console.log(this.state.posts)
-            console
-        })
+                posts: response.data
+            })      
+        })  
+        .catch(error => {
+                console.log(error);
+        });
+    
     }
     render(){ 
         const { previewVisible, previewImage, fileList } = this.state;

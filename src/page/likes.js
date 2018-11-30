@@ -1,5 +1,6 @@
-import React from "react";
+import React from "react"
 import CardList from '../component/CardList'
+import axios from 'axios'
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -13,35 +14,15 @@ class Likes extends React.Component {
     }  
 
     componentDidMount(){
-        ipcRenderer.send('request-image','likes');
-        ipcRenderer.on('show-likes-image',(event, arg) => {
-            console.log(arg)
-            this.setState({
-                posts: arg
-            })
-            console.log(this.state.posts)
-        })
-        
-        
-        /*console.log("SKJKEJTEJWLAT");
-        axios.get("https://reddit.com/r/aww.json")
+        axios.get("http://localhost:8000/wallpapers/likes")
             .then(response => {
                 this.setState({
-                    posts: response.data.data.children
+                    posts: response.data
                 })      
             })  
             .catch(error => {
                     console.log(error);
             });
-        console.log(this.state.posts);
-        */
-
-       ipcRenderer.on('show-search-result',(event, arg) => {
-        this.setState({
-            posts: arg
-        });
-        
-    });
     }
     render(){       
         return (

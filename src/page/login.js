@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { NavLink } from "react-router-dom";
-// import { Redirect, BrowserRouter } from 'react-router-dom';
+import axios from 'axios';
+
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const FormItem = Form.Item;
@@ -13,9 +14,7 @@ class NormalLoginForm extends React.Component {
   };
   
   componentDidMount(){
-    ipcRenderer.on('transitionToHome', () => {
-      this.props.history.push('/')
-    });
+
   }
   handleGetUsername = (event) => {
     this.setState({
@@ -33,8 +32,31 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // alert(this.state.Username + this.state.Password)
-        ipcRenderer.send('login', this.state.Username, this.state.Password);
+        axios({
+          url: 'http://localhost:8000/login',
+          method: 'post',
+          data: {
+            email:  this.state.Username,
+            password:  this.state.Password
+          },
+          transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+          .then(response => {   
+            this.props.history.push('/');
+          })  
+          .catch(error => {
+            console.log(error);
+          });
       }
     });
   }

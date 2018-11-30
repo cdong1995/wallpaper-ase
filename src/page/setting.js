@@ -1,5 +1,6 @@
 import { Select,InputNumber,Button } from 'antd';
 import React from "react";
+import axios from 'axios';
 
 const Option = Select.Option;
 const electron = window.require('electron');

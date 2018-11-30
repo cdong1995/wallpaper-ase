@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
 import { NavLink } from "react-router-dom";
+import axios from 'axios';
+
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const FormItem = Form.Item;
@@ -17,9 +19,9 @@ class RegistrationForm extends React.Component {
   };
 
   componentDidMount(){
-    ipcRenderer.on('transitionToLogin', () => {
-      this.props.history.push('/login');
-    });
+    // ipcRenderer.on('transitionToLogin', () => {
+    //   this.props.history.push('/login');
+    // });
   }
   handleGetEmail = (event) => {
     this.setState({
@@ -43,7 +45,32 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        ipcRenderer.send('register', this.state.Email, this.state.Password, this.state.confirmPassword);
+        axios({
+          url: 'http://localhost:8000/register',
+          method: 'post',
+          data: {
+            email:  this.state.Email,
+            password:  this.state.Password
+          },
+          transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+        .then(response => {   
+          this.props.history.push('/login');
+        })  
+        .catch(error => {
+          console.log(error);
+        });
+        //ipcRenderer.send('register', this.state.Email, this.state.Password, this.state.confirmPassword);
       }
       else{
         alert(err.message);
