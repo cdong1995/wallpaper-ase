@@ -89,9 +89,9 @@ app.get('/search', (req, res) => {
         });    
 })
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
   console.log(req.query)
-  firebase.auth().signInWithEmailAndPassword(req.query.username, req.query.password).then(function(){
+  firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(function(){
     console.log("Login Success")
     res.send("successful");
   }).catch(function(error){
@@ -102,6 +102,8 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
+  console.log(req)
+  console.log(req.body)
   firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password).then(function(userData){
     console.log('Register Success');
     let newUser = {uid : userData.user.uid}
@@ -125,6 +127,6 @@ app.get('/', (req, res) => {
     res.send('hello world');
 })
 
-app.listen("3000", function(){
+app.listen("8000", function(){
    console.log("API service started!"); 
 });
